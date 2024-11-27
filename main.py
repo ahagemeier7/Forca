@@ -29,9 +29,7 @@ def Jogar():
             if letraDigitada in letrasTentadas: #Confere se a letra que ele escreveu não é uma repetida
                 print("Você já tentou essa letra. Tente outra!")
                 continue
-            
-            print(palavraAleatoria)
-            
+                        
             letrasTentadas.add(letraDigitada)
             if letraDigitada in palavraAleatoria: #Se a letra estiver na palavra ele adiciona a letra no indice i da palavra escondida trocando o valor "_" pela letra
                 print(f"A letra '{letraDigitada}' esta na palavra! ")
@@ -41,21 +39,26 @@ def Jogar():
                             
                 for letra in palavraEscondida: # printa a palavra escondida '_ _ _ _ _'       
                     print(letra, end=" ")  
-                print("")       
-                    
+                print("")              
             else:
+                print("..............")
                 print(f"A letra '{letraDigitada}' não está na palavra.")
-                print(f"Voce tem {erros} erro(s) ")
                 erros += 1
+                print(f"Você tem {erros} erro(s) ")
+                print("..............")
         else:
-            print("Voce perdeu!")
             print("")
-    print("Você ganhou! Parabéns")
-    print("-------------------------------")
+            print("Voce perdeu!")
+            print(f"A palavra era {palavraAleatoria}")
+            print("")
+            break
+    if "_" not in palavraEscondida:
+        print("-------------------------------")
+        print("Você ganhou! Parabéns")
+        print("-------------------------------")
+        
                     
-    
-    
-    
+
 
 i = ""
 while i != "4":
