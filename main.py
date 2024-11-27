@@ -4,13 +4,58 @@ def Jogar():
     print("Você escolheu jogar!\nDigite seu Nome: ")
     nomeDoJogador = input()
     
-    with open("palavras.txt","r") as arquivo: #Abre o arquivo de texto onde tem as palavras e depis separa por espaço em branco as palavras em uma lista
+    with open("palavras.txt","r") as arquivo: #Abre o arquivo de texto onde tem as palavras e depois separa por espaço em branco as palavras em uma lista
         texto = arquivo.read()
         palavras = list(map(str,texto.split()))
     
-    palavraAleatoria = random.choice(palavras)
+    palavraAleatoria = random.choice(palavras) #Cria uma lista de "_" para cada letra na palavra Aleatoria e printa a "palava escondida"
+    palavraEscondida = ["_" for _ in palavraAleatoria] 
     
-    print(palavraAleatoria)
+    for letra in palavraEscondida: # printa a palavra escondida '_ _ _ _ _'
+        print(letra , end=" ")  
+    print("")
+    
+    letrasTentadas = set() #Cria array
+    while "_" in palavraEscondida: #O código abaixo vai rodar enquanto todas as letras não estiverem sido descobertas
+        
+        if erros < 5:
+            
+            print("Digite uma letra: ")
+            letraDigitada = input()
+            if len(letraDigitada) > 1:
+                print("A entrada deve ser de somente 1 letra, tente novamente!")
+                continue
+                
+            if letraDigitada in letrasTentadas: #Confere se a letra que ele escreveu não é uma repetida
+                print("Você já tentou essa letra. Tente outra!")
+                continue
+            
+            print(palavraAleatoria)
+            
+            letrasTentadas.add(letraDigitada)
+            if letraDigitada in palavraAleatoria: #Se a letra estiver na palavra ele adiciona a letra no indice i da palavra escondida trocando o valor "_" pela letra
+                print(f"A letra '{letraDigitada}' esta na palavra! ")
+                for i, char in enumerate(palavraAleatoria):
+                    if char == letraDigitada:
+                        palavraEscondida[i] = letraDigitada
+                            
+                for letra in palavraEscondida: # printa a palavra escondida '_ _ _ _ _'       
+                    print(letra, end=" ")  
+                print("")       
+                    
+            else:
+                print(f"A letra '{letraDigitada}' não está na palavra.")
+                print(f"Voce tem {erros} erro(s) ")
+                erros += 1
+        else:
+            print("Voce perdeu!")
+            print("")
+    print("Você ganhou! Parabéns")
+    print("-------------------------------")
+                    
+    
+    
+    
 
 i = ""
 while i != "4":
