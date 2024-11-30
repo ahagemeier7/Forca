@@ -1,9 +1,11 @@
 import random
+ranking = {}
 def Jogar():
     erros = 0
     print("Você escolheu jogar!\nDigite seu Nome: ")
-    nomeDoJogador = input()
-    
+    nomeDoJogador = input().strip()
+    tentativas = 0
+    acertos = 0
     with open("palavras.txt","r") as arquivo: #Abre o arquivo de texto onde tem as palavras e depois separa por espaço em branco as palavras em uma lista
         texto = arquivo.read()
         palavras = list(map(str,texto.split()))
@@ -16,34 +18,47 @@ def Jogar():
     print("")
     
     letrasTentadas = set() #Cria array
+    
     while "_" in palavraEscondida: #O código abaixo vai rodar enquanto todas as letras não estiverem sido descobertas
         
         if erros < 5:
             
             print("Digite uma letra: ")
-            letraDigitada = input()
+            letraDigitada = input().lower()
+            
+            if letraDigitada.isalpha() == False:
+                print("A entrada deve ser somente letra, tente novamente!")
+                continue
+            
             if len(letraDigitada) > 1:
                 print("A entrada deve ser de somente 1 letra, tente novamente!")
                 continue
-                
+              
             if letraDigitada in letrasTentadas: #Confere se a letra que ele escreveu não é uma repetida
                 print("Você já tentou essa letra. Tente outra!")
                 continue
-                        
+            tentativas += 1
+                       
             letrasTentadas.add(letraDigitada)
+            
             if letraDigitada in palavraAleatoria: #Se a letra estiver na palavra ele adiciona a letra no indice i da palavra escondida trocando o valor "_" pela letra
                 print(f"A letra '{letraDigitada}' esta na palavra! ")
+                acertos += 1
+                
                 for i, char in enumerate(palavraAleatoria):
                     if char == letraDigitada:
                         palavraEscondida[i] = letraDigitada
                             
                 for letra in palavraEscondida: # printa a palavra escondida '_ _ _ _ _'       
                     print(letra, end=" ")  
-                print("")              
+                print("")  
+                            
             else:
                 print("..............")
                 print(f"A letra '{letraDigitada}' não está na palavra.")
+                
                 erros += 1
+                
                 print(f"Você tem {erros} erro(s) ")
                 print("..............")
         else:
@@ -52,25 +67,50 @@ def Jogar():
             print(f"A palavra era {palavraAleatoria}")
             print("")
             break
+        
     if "_" not in palavraEscondida:
         print("-------------------------------")
         print("Você ganhou! Parabéns")
         print("-------------------------------")
         
+    razaoDeacertos = round((acertos/tentativas)*100,2)
+        
+    if nomeDoJogador in ranking:
+        ranking[nomeDoJogador]["acertos"] += acertos
+        ranking[nomeDoJogador]["tentativas"] += tentativas
+        ranking[nomeDoJogador]["razao"] += razaoDeacertos
+    else:
+        ranking[nomeDoJogador] = {"acertos": acertos, "tentativas": tentativas, "razao": razaoDeacertos}
+    
                     
 def Ranking():
-    # Como fazer:
-    # Criar variaveis para contar a quantidade de chutes certos e errados dentro do metodo Jogar()
-    # A chave do dicionário vai ser o nome e o valor a razão de acertos ex: {"Augusto": 15}
-    # precisa fazer a conferencia para que se o nome já estver na lista só somar a quantidade de acertos, e de jogadas totais
-    # Provavelmente tem que fazer um outro dicionário que vai reeber a chave com o nome tambpem, mas com valor, jogadas totais algo assim:
-    #   ranking = {
-    #   "Alice": {"acertos": 25, "tentativas": 35},
-    #   "Bob": {"acertos": 18, "tentativas": 25}
-    #   } 
-    # para fazer a razão precisamos validar se o numero de tentativas vai ser diferente de 0
-    # A visualização do ranking vai ter q fazer o sort de acordo com a razão dos acertos e printar em desc
-    return
+    global ranking # acessa o dicionario ranking
+    
+    print("\n=== Ranking ===")
+    
+    ranking_completo = []
+    for nome, valores in ranking.items():
+        acertos = valores["acertos"]
+        tentativas = valores["tentativas"]
+        razao = valores["razao"]
+        ranking_completo.append((nome, acertos, tentativas, razao))
+
+    ranking_ordenado = sorted(ranking_completo, key=lambda x: x[3], reverse=True)
+
+    for i, (nome, acertos, tentativas, razao) in enumerate(ranking_ordenado, start=1):
+        print(f"{i}º lugar: {nome} -  {razao}% de acerto")
+
+
+def AdicionarPalavra():
+    with open("palavras.txt", "a") as arquivo:
+        
+        nova_palavra = input("Digite a nova palavra para adicionar: ").strip().lower()
+        
+        if nova_palavra.isalpha():
+            arquivo.write("\n" + nova_palavra)
+            print("Palavra adicionada com sucesso!")
+        else:
+            print("A palavra deve conter apenas letras!")
 
 
 i = ""
@@ -81,9 +121,9 @@ while i != "4":
         case "1":
             Jogar()
         case "2":
-            print("2")
+            Ranking()
         case "3":
-            print("3")
+            AdicionarPalavra()
         case "4":
             i = "4"
         case _:
