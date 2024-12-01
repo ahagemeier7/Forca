@@ -14,8 +14,9 @@ def Jogar():
     
     palavraAleatoria = random.choice(palavras) #Cria uma lista de "_" para cada letra na palavra Aleatoria e printa a "palava escondida"
     
-    #mudar
-    palavraEscondida = ["_" for _ in palavraAleatoria]
+    palavraEscondida = []
+    for letra in palavraAleatoria: # para cada letra na palavra, coloca um _ na palavra escondida
+        palavraEscondida.append("_")
     
     for traco in palavraEscondida: # printa a palavra escondida '_ _ _ _ _'
         print(traco, end=" ")
@@ -92,7 +93,6 @@ def Jogar():
 # }
       
 def Ranking():
-    #mudar 
     print("\n=== Ranking ===")
     ranking_completo = [] #Inicializa uma lista para colocar os itens
     
@@ -132,4 +132,3 @@ while i != "4":
         i = "4"
     else:
         print("Opção inexistente, tente novamente!\n")
-    
