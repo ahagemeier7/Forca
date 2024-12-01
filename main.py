@@ -23,6 +23,7 @@ def Jogar():
         
         if erros < 5:
             
+            print("_______________________________")
             print("Digite uma letra: ")
             letraDigitada = input().lower()
             
@@ -42,7 +43,7 @@ def Jogar():
             letrasTentadas.add(letraDigitada)
             
             if letraDigitada in palavraAleatoria: #Se a letra estiver na palavra ele adiciona a letra no indice i da palavra escondida trocando o valor "_" pela letra
-                print(f"A letra '{letraDigitada}' esta na palavra! ")
+                print(f"\nA letra '{letraDigitada}' esta na palavra! ")
                 acertos += 1
                 
                 for i, char in enumerate(palavraAleatoria):
@@ -73,7 +74,7 @@ def Jogar():
         print("Você ganhou! Parabéns")
         print("-------------------------------")
         
-    razaoDeacertos = round((acertos/tentativas)*100,2)
+    razaoDeacertos = round((acertos/tentativas)*100, 2)
         
     if nomeDoJogador in ranking:
         ranking[nomeDoJogador]["acertos"] += acertos
@@ -88,25 +89,26 @@ def Ranking():
     
     print("\n=== Ranking ===")
     
-    ranking_completo = []
-    for nome, valores in ranking.items():
+    ranking_completo = [] #Inicializa uma lista para colocar os itens
+    
+    for nome, valores in ranking.items(): #Coloca todos os itens na lista
         acertos = valores["acertos"]
         tentativas = valores["tentativas"]
         razao = valores["razao"]
         ranking_completo.append((nome, acertos, tentativas, razao))
 
-    ranking_ordenado = sorted(ranking_completo, key=lambda x: x[3], reverse=True)
+    ranking_ordenado = sorted(ranking_completo, key=lambda x: x[3], reverse=True) #ordena a lista de forma decrescente, pelo item 3 da tupla
 
-    for i, (nome, acertos, tentativas, razao) in enumerate(ranking_ordenado, start=1):
+    for i, (nome, acertos, tentativas, razao) in enumerate(ranking_ordenado, start=1): #printa a lista em ordem, comecando pelo número 1
         print(f"{i}º lugar: {nome} -  {razao}% de acerto")
 
 
 def AdicionarPalavra():
-    with open("palavras.txt", "a") as arquivo:
+    with open("palavras.txt", "a") as arquivo: #Abre o arquivos de texto, em modo de "adicao"
         
         nova_palavra = input("Digite a nova palavra para adicionar: ").strip().lower()
         
-        if nova_palavra.isalpha():
+        if nova_palavra.isalpha(): 
             arquivo.write("\n" + nova_palavra)
             print("Palavra adicionada com sucesso!")
         else:
